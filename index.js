@@ -36,26 +36,26 @@ async function run() {
     // important
     const database = client.db("userDB");
     const userCollection = database.collection("users");
-    //important
+
+    //important GET R
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
-    // important
+    // important POST C
     app.post("/users", async (req, res) => {
       const user = req.body;
       const result = await userCollection.insertOne(user);
       res.send(result);
     });
 
+    // important Delete D
     app.delete("/users/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await userCollection.deleteOne(query);
       res.send(result);
-
-      console.log("please delete", id);
     });
 
     // Send a ping to confirm a successful connection
