@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -35,7 +35,7 @@ async function run() {
 
     // important
     const database = client.db("userDB");
-    const userCollection = database.collection("user");
+    const userCollection = database.collection("users");
     //important
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find();
@@ -47,6 +47,15 @@ async function run() {
       const user = req.body;
       const result = await userCollection.insertOne(user);
       res.send(result);
+    });
+
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+
+      console.log("please delete", id);
     });
 
     // Send a ping to confirm a successful connection
